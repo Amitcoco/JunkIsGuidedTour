@@ -245,7 +245,7 @@
     z-index: 9998; 
     cursor: default; 
     user-select: none;
-    pointer-events: none; /* Never blocks interaction */
+    pointer-events: auto; /* Enable hover for tooltip */
   }
   .eye-float img{ 
     width: 120px; 
@@ -254,8 +254,8 @@
   }
   .eye-tip{
     position: absolute; 
-    left: 150px; 
-    top: 20px;
+    left: 130px; 
+    top: 10px;
     min-width: 300px !important; 
     width: 350px !important; 
     max-width: 400px !important;
