@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Junk_is - Guided Tour</title>
+<style>
+  :root{ --w:800px; --pad:18px; --radius:380px; --item:170px; }
+  /* Base */
+  body{ margin:0; font:16px/1.5 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace; color:#111; background:#fff; }
+  .wrap{ max-width:var(--w); margin:0 auto; padding:28px var(--pad) 80px; }
+  
+  /* ===== Equal spacing between sections ===== */
+  :root{
+    --section-gap: 120px;   /* reduced from 200px - less spacing between sections */
+    --arrow-gap: 40px;      /* reduced from 60px - less space around arrows */
+    --views-safety: 150px;  /* reduced from 200px - less room for captions */
+    --radius: 380px;        /* keep the larger circle */
+    --item: 170px;          /* slimmer cards inside the circle */
+  }
+
+  section{ margin: var(--section-gap) 0; }
+  .arrow{ margin: var(--arrow-gap) 0; font-size: 40px; letter-spacing: 2px; line-height: 1; opacity:.7; text-align: center; }
+  
+  figure{ margin:0; }
+  .media{ width:100%; height:auto; display:block; border-radius:8px; }
+  figcaption.caption{ margin-top:24px; color:#444; }
+  .caption:empty{ display:none; }
+
+  /* Intro text styling */
+  .intro-text{ 
+    margin-bottom: 60px; 
+    line-height: 1.7; 
+    color: #333; 
+    font-size: 16px; 
+  }
+  .intro-text p{ 
+    margin-bottom: 20px; 
+  }
+  .intro-text p:last-child{ 
+    margin-bottom: 0; 
+  }
+  /* Make "Junk_is" larger and green */
+  .intro-text strong{ 
+    font-size: 20px; 
+    color: #00FF00; 
+  }
+
+  /* Back button styling */
+  .back-button-section{ 
+    text-align: center; 
+    margin-top: 80px; 
+    margin-bottom: 40px; 
+  }
+  .back-to-exploring{ 
+    background: #111; 
+    color: #fff; 
+    border: none; 
+    padding: 16px 32px; 
+    font-size: 16px; 
+    font-family: inherit; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    transition: background 0.2s ease; 
+  }
+  .back-to-exploring:hover{ 
+    background: #333; 
+  }
+
+  /* Non-view GIFs narrower so layout breathes */
+  #Title .media, #Enter .media, #Menu .media,
+  #FocusMode .media, #UploadJunk .media, #upload .media{
+    max-width: 480px; margin: 0 auto;
+  }
+
+  /* 7-view honeycomb cluster layout */
+  .views-ring{ margin: var(--section-gap) 0; }
+  
+  /* Honeycomb layout parameters - TUNEABLE */
+  /* 
+   * TUNEABLES:
+   * --cellSize: Controls the maximum width of each card (default: 200px)
+   * --cellGap: Controls the spacing between cards (default: 24px)
+   * 
+   * To adjust the layout:
+   * - Increase --cellSize for larger cards
+   * - Increase --cellGap for more spacing between cards
+   * - The hex proportions are maintained automatically
+   */
+  :root { 
+    --cellSize: 200px;               /* Maximum card width - adjust for card size */
+    --cellGap: 24px;                 /* Base gap between cards - adjust for spacing */
+    --caption-gap: 6px;              /* Space between title and caption (4-8px range) */
+  }
+  
+  /* Honeycomb container - CSS Grid with named areas */
+  #views .ring {
+    display: grid;
+    grid-template-columns: repeat(5, var(--cellSize));
+    grid-template-rows: repeat(3, auto);
+    column-gap: var(--cellGap);
+    row-gap: calc(var(--cellGap) * 0.85); /* Maintain hex proportions */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px;
+    justify-content: center;
+    align-items: center;
+    /* Classic 2-3-2 honeycomb pattern */
+    grid-template-areas: 
+      ". tl . tr ."    /* Row 1: top-left, top-right */
+      "l . c . r"      /* Row 2: left, center, right */
+      ". bl . br .";   /* Row 3: bottom-left, bottom-right */
+  }
+  
+  /* Each card in normal document flow - no transforms or absolute positioning */
+  #views .view {
+    width: var(--cellSize);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1;
+  }
+  
+  /* Honeycomb positioning using CSS Grid areas - no transforms or absolute positioning */
+  #views .v1 { 
+    grid-area: c; /* Rhizome - center (row 2, column 3) */
+  }
+  #views .v2 { 
+    grid-area: tl; /* Open Question - top-left */
+  }
+  #views .v3 { 
+    grid-area: tr; /* Temperature - top-right */
+  }
+  #views .v4 { 
+    grid-area: l; /* Completeness - left */
+  }
+  #views .v5 { 
+    grid-area: r; /* Gallery - right */
+  }
+  #views .v6 { 
+    grid-area: br; /* Intimacy - bottom-right */
+  }
+  #views .v7 { 
+    grid-area: bl; /* Creator - bottom-left */
+  }
+
+  .view .media{ 
+    border-radius: 8px; 
+    width: 100%;
+    max-width: var(--cellSize);
+    height: auto;
+    display: block;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+  }
+
+  /* Captions with tight spacing */
+  #views .caption{ 
+    font-size: 16px;
+    line-height: 1.5; 
+    max-width: 100%;
+    margin: var(--caption-gap) 0 0 0;
+    word-wrap: break-word;
+  }
+  
+  #views .caption strong {
+    display: block;
+    margin: 0 0 var(--caption-gap);
+    line-height: 1.3;
+    font-size: 18px;
+  }
+
+  #views .caption p {
+    margin: 0; /* Remove default paragraph margins for predictable spacing */
+  }
+
+  #views .caption br { 
+    display: none; 
+  }
+
+  /* Ensure figures don't add outer spacing */
+  #views figure.view { 
+    margin: 0; 
+  }
+
+  /* On hover, bring a card above neighbors */
+  .view:hover{ 
+    z-index: 3; 
+  }
+
+  /* Safety to prevent accidental overlay */
+  .view * { 
+    position: static; 
+  }
+
+  /* Responsive breakpoints */
+  @media (max-width: 1199px) {
+    /* Tablet: keep 2-3-2 honeycomb, reduce cell size if needed */
+    #views .ring {
+      --cellSize: 180px; /* Slightly smaller cards */
+      --cellGap: 28px;   /* Slightly larger gaps */
+      padding: 30px;
+    }
+  }
+  
+  @media (max-width: 799px) {
+    /* Mobile: 1-column stack, no honeycomb */
+    #views .ring {
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(7, auto);
+      grid-template-areas: 
+        "c"
+        "tl"
+        "tr"
+        "l"
+        "r"
+        "bl"
+        "br";
+      gap: 30px; /* Equal vertical gaps */
+      padding: 20px;
+      max-width: 600px;
+    }
+    
+    #views .view {
+      width: 100%;
+      max-width: 400px;
+    }
+  }
+
+  /* Floating eye - completely independent, decorative only */
+  .eye-float{
+    position: fixed; 
+    left: 0; 
+    top: 0;
+    transform: translate(12px, 12px);
+    z-index: 9998; 
+    cursor: default; 
+    user-select: none;
+    pointer-events: none; /* Never blocks interaction */
+  }
+  .eye-float img{ 
+    width: 120px; 
+    height: 120px; 
+    display: block; 
+  }
+  .eye-tip{
+    position: absolute; 
+    left: 150px; 
+    top: 20px;
+    min-width: 300px !important; 
+    width: 350px !important; 
+    max-width: 400px !important;
+    background: rgba(0,0,0,.95); 
+    color: #fff; 
+    padding: 16px 20px; 
+    border-radius: 12px;
+    font-size: 16px; 
+    line-height: 1.5; 
+    white-space: normal !important;
+    word-break: normal !important; 
+    overflow-wrap: normal !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,.3); 
+    opacity: 0; 
+    transform: translateY(6px);
+    transition: opacity .2s ease, transform .2s ease; 
+    z-index: 9999;
+  }
+  .eye-float:hover .eye-tip{ 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+
+  /* 4) Responsive: convert to grid on smaller screens */
+  /* DISABLED: Radial layout now shows on all screen sizes */
+  /*
+  @media (max-width: 2000px) {
+    #views .ring { 
+      height: auto;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 60px;
+      position: static;
+      max-width: 800px;
+      align-items: start;
+    }
+    #views .view { 
+      position: static;
+      transform: none;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #views .caption{ 
+      max-width: 100%; 
+      font-size: 16px; 
+      line-height: 1.4; 
+      margin-top: 10px;
+      text-align: center;
+    }
+  }
+  */
+  
+  @media (max-width: 800px) {
+    #views .ring { 
+      grid-template-columns: 1fr;
+      gap: 50px; 
+    }
+  }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .eye-float{ left:auto; right:18px; top:auto; bottom:18px; transform:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- Introductory text -->
+  <section id="intro" class="intro-text">
+    <p><strong>Junk_is</strong> is an interactive platform that transforms unfinished creative fragments - sketches, notes, abandoned ideas -into a living archive. Rather than hiding what is incomplete, the project treats these leftovers as valuable material: traces of thought, emotion, and experimentation.</p>
+    <p>By collecting and re-organizing these fragments, <strong>Junk_is</strong> creates a space where imperfection becomes generative. Users can wander, explore, and connect unexpected pieces, revealing hidden relationships and new narratives.</p>
+    <p>Developed as my Master's final project in collaboration with Daphne Perlman, <strong>Junk_is</strong> bridges digital and physical practices - mixing coding, design, and analog processes - while questioning how we remember, forget, and reshape our creative journeys.</p>
+  </section>
+
+  <!-- #Title -->
+  <section id="Title" class="non-view">
+    <figure>
+      <img class="media" src="/Assets/Title.gif" alt="Title" loading="lazy" decoding="async">
+      <figcaption class="caption"></figcaption>
+    </figure>
+  </section>
+  <div class="arrow">↓</div>
+
+  <!-- #Enter -->
+  <section id="Enter" class="non-view">
+    <figure>
+      <img class="media" src="/Assets/Enter.gif" alt="Enter" loading="lazy" decoding="async">
+      <figcaption class="caption"></figcaption>
+    </figure>
+  </section>
+  <div class="arrow">↓</div>
+
+  <!-- #Menu -->
+  <section id="Menu" class="non-view">
+    <figure>
+      <img class="media" src="/Assets/Menu.gif" alt="Menu" loading="lazy" decoding="async">
+      <figcaption class="caption"></figcaption>
+    </figure>
+  </section>
+  <div class="arrow">↓</div>
+
+  <!-- #views : 7-view circle in this exact clockwise order -->
+  <section id="views" class="views-ring">
+    <div class="ring">
+      <!-- v1: Rhizome -->
+      <figure class="view v1">
+        <img class="media" src="/Assets/Rhizome.gif" alt="Rhizome" loading="lazy" decoding="async">
+        <figcaption class="caption"></figcaption>
+      </figure>
+      <!-- v2: Completeness -->
+      <figure class="view v2">
+        <img class="media" src="/Assets/Completeness.gif" alt="Completeness" loading="lazy" decoding="async">
+        <figcaption class="caption"></figcaption>
+      </figure>
+      <!-- v3: Temperature -->
+      <figure class="view v3">
+        <img class="media" src="/Assets/Temperature.gif" alt="Temperature" loading="lazy" decoding="async">
+        <figcaption class="caption"></figcaption>
+      </figure>
+      <!-- v4: OpenQuestion -->
+      <figure class="view v4">
+        <img class="media" src="/Assets/OpenQuestion.gif" alt="Open Question" loading="lazy" decoding="async">
+        <figcaption class="caption"></figcaption>
+      </figure>
+      <!-- v5: Creator -->
+      <figure class="view v5">
+        <img class="media" src="/Assets/Creator.gif" alt="Creator" loading="lazy" decoding="async">
+        <figcaption class="caption"></figcaption>
+      </figure>
+      <!-- v6: Gallery -->
+      <figure class="view v6">
+        <img class="media" src="/Assets/Gallery.gif" alt="Gallery" loading="lazy" decoding="async">
+        <figcaption class="caption"></figcaption>
+      </figure>
+      <!-- v7: Intimacy -->
+      <figure class="view v7">
+        <img class="media" src="/Assets/Intimacy.gif" alt="Intimacy" loading="lazy" decoding="async">
+        <figcaption class="caption"></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- #FocusMode -->
+  <div class="arrow">↓</div>
+  <section id="FocusMode" class="non-view">
+    <figure>
+      <img class="media" src="/Assets/FocusMode.gif" alt="Focus Mode" loading="lazy" decoding="async">
+      <figcaption class="caption"></figcaption>
+    </figure>
+  </section>
+
+  <!-- #UploadJunk -->
+  <div class="arrow">↓</div>
+  <section id="UploadJunk" class="non-view">
+    <figure>
+      <img class="media" src="/Assets/UploadJunk.gif" alt="Upload button demo" loading="lazy" decoding="async">
+      <figcaption class="caption"></figcaption>
+    </figure>
+  </section>
+
+  <!-- #upload -->
+  <div class="arrow">↓</div>
+  <section id="upload" class="non-view">
+    <figure>
+      <img class="media" src="/Assets/Upload.gif" alt="Upload demo" loading="lazy" decoding="async">
+      <figcaption class="caption"></figcaption>
+    </figure>
+    <!-- If you have a second GIF for upload, stack it here:
+    <figure>
+      <img class="media" src="/Assets/Upload-2.gif" alt="Upload demo part 2" loading="lazy" decoding="async">
+      <figcaption class="caption"></figcaption>
+    </figure>
+    -->
+  </section>
+
+  <!-- Back to Exploring Button -->
+  <section id="back-button" class="back-button-section">
+    <button class="back-to-exploring" onclick="document.getElementById('views').scrollIntoView({behavior: 'smooth'})">
+      Back to Exploring
+    </button>
+  </section>
+
+</div>
+
+<!-- Decorative drifting eye (not clickable) -->
+<div class="eye-float" role="presentation" aria-hidden="true">
+  <img src="/Assets/TransperengGlitchyEye.gif" alt="">
+  <span class="eye-tip">Designed to show where you are in each view and how to find your way around it.</span>
+</div>
+
+<script>
+/* Random drifting for the decorative eye (paused for reduce-motion users) */
+(function(){
+  const el = document.querySelector('.eye-float');
+  if(!el) return;
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce) return; // parked bottom-right via CSS
+
+  let timer;
+  function drift(){
+    const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+    const vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+    const w = el.offsetWidth || 56;
+    const h = el.offsetHeight || 56;
+    const pad = 12;
+
+    const x = Math.random() * (vw - w - pad*2) + pad;
+    const y = Math.random() * (vh - h - pad*2) + pad;
+    const dur = 8000 + Math.random()*7000; // 8–15s
+
+    el.style.transition = 'transform '+dur+'ms linear';
+    el.style.transform  = 'translate('+x+'px,'+y+'px)';
+
+    clearTimeout(timer);
+    timer = setTimeout(drift, dur + 60);
+  }
+
+  // Pause drift while hovered so tooltip is readable
+  el.addEventListener('mouseenter', ()=> el.style.transition = 'transform 0ms');
+  el.addEventListener('mouseleave', ()=> setTimeout(drift, 120));
+
+  requestAnimationFrame(drift);
+})();
+
+/* ---- CAPTIONS: paste EXACT text from https://amitcocohen.com/junk-is ---- */
+const CAPTIONS = {
+  Title: `This is the open title to the platform - designed to be glitchy and imperfect, to reflect process rather than a polished product.`,
+  Enter: `Entering the world of Junk_is, like a galaxy where each view has its own way of treating unfinished works.`,
+  Menu: `This is the menu of the platform - each icon opens a different way of exploring the archive. It's designed to encourage non-linear searching, letting users navigate like they would in a constellation rather than a list.`,
+
+  Rhizome: `**Rhizome**\n\nFragments are connected through their semantic relations. Unfinished pieces rarely stand alone; they reveal new meaning when linked to other traces, like roots or threads weaving together.`,
+  Completeness: `**Completeness**\n\nFragments are organized by their stage in the process. Early beginnings rise to the top, while more developed works settle at the bottom - showing how unfinished ideas carry different weights of meaning.`,
+  Temperature: `**Temperature**\n\nWorks are placed by their visual energy: bold lines and warm colors at the center, softer and cooler tones towards the edges. Even incomplete fragments carry a temperature, an intensity or calmness that shapes how we see them.`,
+  OpenQuestion: `**Open Question**\n\nSearching for a word reshapes the archive around it, bringing forward fragments connected to that term. Meaning here is fluid, shifting depending on what the user is curious about.`,
+  Creator: `**Creator**\n\nThe archive organizes itself around people, showing the different works each creator has contributed. Fragments cluster into personal constellations, reflecting individual processes and identities.`,
+  Gallery: `**Gallery**\n\nThis view gathers works under a familiar quote from pop culture — a line from a movie, book, or song. It creates an engaging layer where fragments are connected through shared cultural references, allowing creators to see their works in a new context.`,
+  Intimacy: `**Intimacy**\n\nFragments are mapped by the unexpected places they were made - a bus seat, a kitchen table, or a balcony at sunset. These settings add another layer to the story, giving clues about the moment of creation.`,
+
+  FocusMode: `Focus on one artwork to discover its details`,
+  UploadJunk: `Uploading happens through a chatbot so it feels like telling a story, not filling a form`,
+  upload: ``};
+
+/* Utility function to strip leading repeated titles */
+function stripLeadingRepeatedTitles(text) {
+  const lines = text.split('\n');
+  let newText = '';
+  let seenTitles = new Set();
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const match = line.match(/\*\*(.*?)\*\*/);
+
+    if (match) {
+      const title = match[1];
+      if (!seenTitles.has(title)) {
+        newText += line + '\n';
+        seenTitles.add(title);
+      }
+    } else {
+      newText += line + '\n';
+    }
+  }
+  return newText.trim();
+}
+
+/* ---- Writer: fills each <figcaption> under the right section ---- */
+(function applyCaptions(){
+  const map = {
+    Title:    '#Title',
+    Enter:    '#Enter',
+    Menu:     '#Menu',
+    Rhizome:  '#views .v1',
+    Completeness: '#views .v2',
+    Temperature:  '#views .v3',
+    OpenQuestion: '#views .v4',
+    Creator:      '#views .v5',
+    Gallery:      '#views .v6',
+    Intimacy:     '#views .v7',
+    FocusMode: '#FocusMode',
+    UploadJunk: '#UploadJunk',
+    upload:     '#upload'
+  };
+
+  Object.entries(map).forEach(([key, sel])=>{
+    const fig = document.querySelector(`${sel} figcaption.caption`);
+    if (fig && CAPTIONS[key] && CAPTIONS[key].trim()) {
+      let content = CAPTIONS[key];
+      
+      // For views, strip leading repeated titles and format properly
+      if (sel.includes('#views')) {
+        // Strip leading repeated titles
+        content = stripLeadingRepeatedTitles(content);
+        
+        // Extract title and description
+        const titleMatch = content.match(/\*\*(.*?)\*\*/);
+        
+        if (titleMatch) {
+          const title = titleMatch[1];
+          const description = content.replace(/\*\*.*?\*\*\s*\n\s*\n/, '').trim();
+          content = `<strong>${title}</strong><br><br>${description}`;
+        }
+      } else {
+        // For non-views, just convert markdown to HTML
+        content = content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        content = content.replace(/\n\n/g, '<br><br>');
+      }
+      
+      fig.innerHTML = content;
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
+
