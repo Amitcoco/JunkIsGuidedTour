@@ -40,10 +40,18 @@
   .intro-text p:last-child{ 
     margin-bottom: 0; 
   }
-  /* Make "Junk_is" larger and green */
-  .intro-text strong{ 
+  /* Make "Junk_is" instances different colors */
+  .junk-is-green{ 
     font-size: 20px; 
-    color: #00FF00; 
+    color: #00FF00; /* Green */
+  }
+  .junk-is-blue{ 
+    font-size: 20px; 
+    color: #0066FF; /* Blue */
+  }
+  .junk-is-red{ 
+    font-size: 20px; 
+    color: #FF0000; /* Red */
   }
 
   /* Back button styling */
@@ -314,6 +322,16 @@
     html{ scroll-behavior:auto; }
     .eye-float{ left:auto; right:18px; top:auto; bottom:18px; transform:none; }
   }
+
+  /* === FINAL OVERRIDES: intro Junk_is colors === */
+  .intro-text p:nth-of-type(1) strong{ color:#00FF00 !important; } /* green  */
+  .intro-text p:nth-of-type(2) strong{ color:#1E90FF !important; } /* blue   */
+  .intro-text p:nth-of-type(3) strong{ color:#FF3B30 !important; } /* red    */
+
+  /* FINAL: per-paragraph colors for the three intro Junk_is words */
+  .intro-text .junk--1 { color:#00FF00 !important; } /* green  */
+  .intro-text .junk--2 { color:#1E90FF !important; } /* blue   */
+  .intro-text .junk--3 { color:#FF3B30 !important; } /* red    */
 </style>
 </head>
 <body>
@@ -322,9 +340,9 @@
 
   <!-- Introductory text -->
   <section id="intro" class="intro-text">
-    <p><strong>Junk_is</strong> is an interactive platform that transforms unfinished creative fragments - sketches, notes, abandoned ideas -into a living archive. Rather than hiding what is incomplete, the project treats these leftovers as valuable material: traces of thought, emotion, and experimentation.</p>
-    <p>By collecting and re-organizing these fragments, <strong>Junk_is</strong> creates a space where imperfection becomes generative. Users can wander, explore, and connect unexpected pieces, revealing hidden relationships and new narratives.</p>
-    <p>Developed as my Master's final project in collaboration with Daphne Perlman, <strong>Junk_is</strong> bridges digital and physical practices - mixing coding, design, and analog processes - while questioning how we remember, forget, and reshape our creative journeys.</p>
+    <p><strong class="junk--1">Junk_is</strong> is an interactive platform that transforms unfinished creative fragments - sketches, notes, abandoned ideas -into a living archive. Rather than hiding what is incomplete, the project treats these leftovers as valuable material: traces of thought, emotion, and experimentation.</p>
+    <p>By collecting and re-organizing these fragments, <strong class="junk--2">Junk_is</strong> creates a space where imperfection becomes generative. Users can wander, explore, and connect unexpected pieces, revealing hidden relationships and new narratives.</p>
+    <p>Developed as my Master's final project in collaboration with Daphne Perlman, <strong class="junk--3">Junk_is</strong> bridges digital and physical practices - mixing coding, design, and analog processes - while questioning how we remember, forget, and reshape our creative journeys.</p>
   </section>
 
   <!-- #Title -->
